@@ -24,7 +24,6 @@ std::string StaticController::getHostname(){
 StaticController::StaticController(const char* hostname, int port, shared_ptr<Backend::TaskQueue>& tqp){
     this->hostname = std::string(hostname);
     this->port = port;
-    Server svr;
     //Static routes
     svr.Get("/task.wasm", [&](const Request& req, Response& res) {
         vector<uint8_t> bin = tqp->getNextTask()->getBinary() ;
