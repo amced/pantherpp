@@ -9,6 +9,7 @@
 #include <iterator>
 #include <exception>
 #include <sstream>
+#include <regex>
 #include "../include/json.hpp"
 
 std::vector<std::uint8_t> fsutil::readBin(const std::string filename)
@@ -39,12 +40,14 @@ std::vector<std::uint8_t> fsutil::readBin(const std::string filename)
 }
 
 std::string fsutil::readScript(const std::string filename)
-{   
+{   //REPLACES FETCH PARAMETERS TO ALLOW COOKIES
         std::ifstream file(filename);
         if(!file) throw std::invalid_argument(std::string("Could not open script file ") + filename);
         std::stringstream buffer;
         buffer << file.rdbuf();
-        return buffer.str();
+        std::regex key("same-origin");
+        std::string repl("include");
+        return std::regex_replace(buffer.str(), key, repl);
 }
 
 nlohmann::json fsutil::readJson(const std::string filename)

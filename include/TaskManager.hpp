@@ -48,10 +48,12 @@ class TaskQueue
         void ManyAddTask(const vector<shared_ptr<Task>>& tasks_in);
         shared_ptr<Task> getNextTask();
         shared_ptr<Task> DispatchNextTask();
+        shared_ptr<Task> getTaskById(const string& task_id);
         void MarkCompleted(string task_id, json& result);
         int nTasks();
         int nTasksRemaining();
         int nTasksOutstanding();
+        vector<json> getResults();
         vector<shared_ptr<Task>> tasks;
 
 

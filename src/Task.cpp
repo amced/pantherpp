@@ -49,10 +49,7 @@ json Backend::Task::getData()
 
 json Backend::Task::getResult()
 {
-    if(!this->completed)
-    {
-        throw logic_error(string("Task not yet complete"));
-    }
+
     return this->result;
 }
 
@@ -70,6 +67,7 @@ bool Backend::Task::IsDispatched()
 void Backend::Task::FillResult(const json result)
 {
     this->result = result;
+    this->MarkCompleted();
 }
 
 void Backend::Task::MarkCompleted(){

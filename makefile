@@ -20,3 +20,4 @@ fsutil: builddir src/fsutil.cpp include/fsutil.hpp
 
 StaticController: builddir src/StaticController.cpp include/TaskManager.hpp
 	$(CXX) $(CXXF) -g -c src/$@.cpp -o build/$@.o
+

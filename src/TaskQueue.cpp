@@ -93,6 +93,20 @@ shared_ptr<Task> Backend::TaskQueue::DispatchNextTask()
     return p;
 }
 
+shared_ptr<Task> Backend::TaskQueue::getTaskById(const string& task_id){
+    if(task_id == string("")) throw invalid_argument("Backend::TaskQueue::getTaskById(), Empty ID fetched.");
+    vector<shared_ptr<Task>>::iterator p = find_if(
+        tasks.begin(),
+        tasks.end(),
+        [&](shared_ptr<Task> const& t){
+            return t->getTaskId() == task_id;
+        }
+    );
+    if(p == tasks.end()) throw range_error("Backend::TaskQueue::getTaskById(), std::find_if() : No element found.");
+    return *p;
+};
+
+
 void Backend::TaskQueue::MarkCompleted(string task_id, json& result)
 {
     shared_ptr<Task> tp = *find_if(
@@ -103,11 +117,19 @@ void Backend::TaskQueue::MarkCompleted(string task_id, json& result)
         }
     );
     tp->FillResult(result);
-    tp->MarkCompleted();
 }
 
 
 int Backend::TaskQueue::nTasks()
 {
     return this->tasks.size();
+}
+
+vector<json> Backend::TaskQueue::getResults(){    
+    vector<json> result;
+    for_each(this->tasks.begin(), this->tasks.end(),
+        [&](shared_ptr<Task> const& t){
+            result.push_back(t->getResult());
+        });
+    return result;
 }
